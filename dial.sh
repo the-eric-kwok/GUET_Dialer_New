@@ -2,7 +2,7 @@
 # Config area
 username=			# 你的学号
 password=			# 你的密码
-isp=1   			# 0: 校园网 Campus Network   1: 中国电信 China Telecom   2:中国联通 China Unicom   3: 中国移动 China Mobile
+isp=    			# 0: 校园网 Campus Network   1: 中国电信 China Telecom   2:中国联通 China Unicom   3: 中国移动 China Mobile
 
 login() {
   [[ $have_wget = 1 ]]&& wget "http://10.32.254.11/drcom/login?callback=dr1557825447911&DDDDD=${username}&upass=${password}&0MKKey=123456&R1=0&R3=${isp}&R6=0&para=00&v6ip=&_=15578245696520" -q -O -; return
@@ -19,7 +19,7 @@ get_ip() {
 }
 
 help() {
-  echo 'new_dial.sh <login/logout>'
+  echo 'Usage: dial.sh <login/logout>'
 }
 
 which wget > /dev/null
@@ -31,9 +31,8 @@ if [[ $have_curl = 0 ]] && [[ $have_wget = 0 ]]; then
   echo "Missing wget and/or curl, please install one of them with opkg."
 fi
 
-if [ -z $username ] || [ -z $password ]; then
-  echo "Username or password is empty, please modify script and fill them with your username and password."
-  echo "Also, don't forget to set the isp variable."
+if [ -z $username ] || [ -z $password ] || [ -z $isp ]; then
+  echo '$username or $password or $isp is empty, please modify script and fill them with your username and password.'
 fi
 
 if [ "$1" = "login" ]; then
