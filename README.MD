@@ -21,7 +21,7 @@
 
    `chmod +x dial.sh`
 
-4. 使用 `dial.sh login` 或 `dial.sh logout` 来进行登录或注销操作
+4. 使用 `./dial.sh login` 或 `./dial.sh logout` 来进行登录或注销操作
 
 ## 小提示
 
