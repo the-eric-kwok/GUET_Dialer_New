@@ -9,7 +9,9 @@
 
 ## 用法
 
-1. 将脚本上传至路由器
+1. 将脚本上传至路由器的`/root`路径下
+
+2. 检查依赖，可以尝试运行 `/root/dial.sh login` 来做自动的依赖检测，如果未安装 curl/wget 的话请先安装其中任意一种，否则脚本将无法工作
 
 2. 用编辑器打开脚本，将`$username`, `$password` , `$isp`三个变量的值设置好，其中：
 
@@ -19,11 +21,21 @@
 
 3. 通过这个命令给脚本设置可执行权限
 
-   `chmod +x dial.sh`
+```
+chmod +x dial.sh
+chmod +x dial_watchdog.sh
+```
 
-4. 使用 `./dial.sh login` 或 `./dial.sh logout` 来进行登录或注销操作
+4. 通过 `crontab -e` 编辑crontab，并且在里面加入一行
+```
+* * * * * /root/dial_watchdog.sh >> /tmp/dial_watchdog.log 2>&1
+```
+以此来每分钟自动检测网络并且执行断网重连。
+
+5. 编辑 `/etc/rc.local` 来添加开机自启动
+```
+/root/dial_watchdog.sh >> /tmp/dial_watchdog.log 2>&1
+```
 
 ## 小提示
-
-你可以通过编辑 `Crontab `和 `/etc/rc.local` 来实现每日自动运行和开机自启
-
+你也可以用 `/root/dial.sh login` 来手动拨号，或者用 `/root/dial.sh logout` 来手动断开连接。
