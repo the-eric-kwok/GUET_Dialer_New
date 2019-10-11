@@ -1,4 +1,10 @@
 #!/bin/sh
+####################################
+# Error Code:                      #
+# 1: Missing wget and/or curl      #
+# 2: username or password is empty #
+####################################
+
 # Config area
 username=			# 你的学号
 password=			# 你的密码
@@ -29,10 +35,12 @@ which curl > /dev/null
 
 if [[ $have_curl = 0 ]] && [[ $have_wget = 0 ]]; then
   echo "Missing wget and/or curl, please install one of them with opkg."
+  exit 1
 fi
 
 if [ -z $username ] || [ -z $password ] || [ -z $isp ]; then
   echo '$username or $password or $isp is empty, please modify script and fill them with your username and password.'
+  exit 2
 fi
 
 if [ "$1" = "login" ]; then
@@ -48,3 +56,4 @@ elif [ "$1" = "logout" ]; then
 else
   help
 fi
+exit 0
