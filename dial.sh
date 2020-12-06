@@ -10,22 +10,35 @@ username=			# 你的学号
 password=			# 你的密码
 isp=    			# 0: 校园网 Campus Network   1: 中国电信 China Telecom   2:中国联通 China Unicom   3: 中国移动 China Mobile
 
+checkstatus() {
+  [[ $have_wget = 1 ]]&& wget -q -O - "http://10.32.254.11/drcom/chkstatus?callback=dr1002&jsVersion=4.1&v=6500&lang=zh"; return
+  [[ $have_curl = 1 ]]&& curl -d "callback=dr1002&jsVersion=4.1&v=6500&lang=zh" --url "http://10.32.254.11/drcom/chkstatus"
+}
+
 login() {
-  [[ $have_wget = 1 ]]&& wget "http://10.32.254.11/drcom/login?callback=dr1557825447911&DDDDD=${username}&upass=${password}&0MKKey=123456&R1=0&R3=${isp}&R6=0&para=00&v6ip=&_=15578245696520" -q -O -; return
-  [[ $have_curl = 1 ]]&& curl -d "callback=dr1557825447911&DDDDD=${username}&upass=${password}&0MKKey=123456&R1=0&R3=${isp}&R6=0&para=00&v6ip=&_=15578245696520" --url "http://10.32.254.11/drcom/login"
+  [[ $have_wget = 1 ]]&& wget -q -O - "http://10.32.254.11/drcom/login?callback=dr1003&DDDDD=${username}&upass=${password}&0MKKey=123456&R1=0&R3=${isp}&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=4186&lang=zh"; return
+  [[ $have_curl = 1 ]]&& curl -d "callback=dr1003&DDDDD=${username}&upass=${password}&0MKKey=123456&R1=0&R3=${isp}&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=4186&lang=zh" --url "http://10.32.254.11/drcom/login"
 }
 
 logout() {
-  [[ $have_wget = 1 ]]&& wget -q -O - "http://10.32.254.11:801/eportal/?c=Portal&a=logout&callback=dr1557832876175&login_method=0&user_account=drcom&user_password=123&ac_logout=1&register_mode=1&wlan_user_ip=${ip_addr}&wlan_user_ipv6=&wlan_vlan_id=1&wlan_user_mac=000000000000&wlan_ac_ip=&wlan_ac_name=&jsVersion=3.3&_=1557832872091"; return
-  [[ $have_curl = 1 ]]&& curl -d "c=Portal&a=logout&callback=dr1557832876175&login_method=0&user_account=drcom&user_password=123&ac_logout=1&register_mode=1&wlan_user_ip=${ip_addr}&wlan_user_ipv6=&wlan_vlan_id=1&wlan_user_mac=000000000000&wlan_ac_ip=&wlan_ac_name=&jsVersion=3.3&_=1557832872091" --url "http://10.32.254.11:801/eportal/"
+  [[ $have_wget = 1 ]] && wget -q -O - "http://10.32.254.11/drcom/logout?callback=dr1005&jsVersion=4.1&v=5350&lang=zh"; return
+  [[ $have_curl = 1 ]] && curl -d "callback=dr1005&jsVersion=4.1&v=5350&lang=zh" --url "http://10.32.254.11/drcom/logout"
 }
 
 get_ip() {
-  ip_addr=$(ifconfig eth1 | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}')
+  ip_addr=$(ifconfig | grep -A 3 'eth' | grep -o -E -m 1 'inet addr:\d+\.\d+\.\d+\.\d+' | cut -d ':' -f 2)
 }
 
 help() {
-  echo 'Usage: dial.sh <login/logout>'
+  echo 'A simple script to play around with GUET network auth system.'
+  echo 'GitHub page: https://github.com/the-eric-kwok/GUET_Dialer_New'
+  echo ''
+  echo 'Usage: dial.sh <option>'
+  echo ''
+  echo 'Options:'
+  echo '  login:  login with provided info'
+  echo '  logout: you got that'
+  echo "  status: check your login status, if result=1 then you've logged in"
 }
 
 which wget > /dev/null
@@ -43,7 +56,9 @@ if [ -z $username ] || [ -z $password ] || [ -z $isp ]; then
   exit 2
 fi
 
-if [ "$1" = "login" ]; then
+if [ "$1" = "status" ]; then
+  checkstatus
+elif [ "$1" = "login" ]; then
   echo "Logging..."
   login
   echo "Done!"
