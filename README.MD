@@ -11,7 +11,7 @@
 
 1. 将脚本上传至路由器的`/root`路径下
 
-2. 检查依赖，可以尝试运行 `/root/dial.sh login` 来做自动的依赖检测，如果未安装 curl/wget 的话请先安装其中任意一种，否则脚本将无法工作
+2. 检查依赖，可以尝试运行 `/root/dial.sh login` 来做自动的依赖检测，**如果未安装 curl/wget 的话请先安装其中任意一种，否则脚本将无法工作**
 
 2. 用编辑器打开脚本，将`$username`, `$password` , `$isp`三个变量的值设置好，其中：
 
@@ -28,14 +28,14 @@ chmod +x dial_watchdog.sh
 
 4. 通过 `crontab -e` 编辑crontab，并且在里面加入一行
 ```
-* * * * * /root/dial_watchdog.sh >> /tmp/dial_watchdog.log 2>&1
+* * * * * /root/watchdog.sh >> /tmp/dial_watchdog.log 2>&1
 ```
 以此来每分钟自动检测网络并且执行断网重连。
 
 5. 编辑 `/etc/rc.local` 来添加开机自启动
 ```
-/root/dial_watchdog.sh >> /tmp/dial_watchdog.log 2>&1
+/root/watchdog.sh >> /tmp/dial_watchdog.log 2>&1
 ```
 
 ## 小提示
-你也可以用 `/root/dial.sh login` 来手动拨号，或者用 `/root/dial.sh logout` 来手动断开连接。
+你也可以用 `/root/dial.sh login` 来手动拨号，或者用 `/root/dial.sh logout` 来手动断开连接，以及使用 `/root/dial.sh status` 来检查拨号状态，返回的内容中若 result 为 1 则已登录，否则需要登录。
