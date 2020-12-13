@@ -19,18 +19,17 @@ check_status() {
 
 networktest() {
         ping -c 2 10.32.254.11 > /dev/null 2>&1
-        [[ $? != 0 ]] && return -1  # Check your wire connection
+        [[ $? != 0 ]] && return 255  # Check your wire connection
         check_status
         return $?
 }
-
 networktest
 result=$?
 if [[ $result == 1 ]]; then
         echo "$(logtime) Network no problem"
         exit 0
 fi
-if [[ $result == -1 ]]; then
+if [[ $result == 255 ]]; then
         echo "$(logtime) Network not connected! Please check your wire connection!"
         exit 1
 fi
