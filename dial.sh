@@ -5,7 +5,7 @@
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.2"
+VERSION="1.0.3"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -22,6 +22,7 @@ isp=""              # 校园网 Campus Network
 # Self update
 auto_update=1        # 1: yes   0: no
 watchdog_update=1    # 1: yes   0: no
+echo $watchdog_update
 ######################################################
 
 
@@ -68,7 +69,7 @@ print_version() {
 
 update() {
     echo 'Checking for update...'
-    remote_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/main/dial.sh'
+    remote_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/auto_update/dial.sh'
     watchdog_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/main/watchdog.sh'
     [ $have_wget -eq 1 ] && [ $have_curl -eq 0 ] && remote_version=$(wget -q -O - $remote_link | grep "VERSION=")
     [ $have_curl -eq 1 ] && [ $have_wget -eq 0 ] && remote_version=$(curl -fsSL $remote_link | grep "VERSION=")
@@ -100,6 +101,7 @@ update() {
         sed -i "s/password=\"\"/password=\"$password\"/g" dial_new.sh
         sed -i "s/#isp=\"$isp\"/isp=\"$isp\"/g" dial_new.sh
         sed -i "s/auto_update=1/auto_update=$auto_update/g" dial_new.sh
+        echo $watchdog_update
         sed -i "s/watchdog_update=1/watchdog_update=$watchdog_update/g" dial_new.sh
         chmod +x dial_new.sh
         chmod +x watchdog.sh
