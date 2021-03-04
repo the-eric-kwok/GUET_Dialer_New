@@ -85,10 +85,10 @@ update() {
       echo 'Updating...'
       if [ $have_wget -eq 1 ] && [ $auto_update -eq 1 ]; then
           wget -q -O dial_new.sh $remote_link
-          [ $watchdog_update -eq 1 ] && wget $watchdog_link
+          [ $watchdog_update -eq 1 ] && wget -q -O watchdog.sh $watchdog_link
       elif [ $have_curl -eq 1 ] && [ $auto_update -eq 1 ]; then
-          curl -L -o dial_new.sh $remote_link
-          [ $watchdog_update -eq 1 ] && curl -OL $watchdog_link
+          curl -fsSL -o dial_new.sh $remote_link
+          [ $watchdog_update -eq 1 ] && curl -fsSOL $watchdog_link
       fi
       sed -i "s/username=\"\"/username=\"$username\"/g" dial_new.sh
       sed -i "s/password=\"\"/password=\"$password\"/g" dial_new.sh
@@ -96,6 +96,7 @@ update() {
       sed -i "s/auto_update=1/auto_update=$auto_update/g" dial_new.sh
       sed -i "s/watchdog_update=1/watchdog_update=$watchdog_update/g" dial_new.sh
       chmod +x dial_new.sh
+      chmod +x watchdog.sh
       mv dial.sh dial_old.sh
       mv dial_new.sh dial.sh
       rm dial_old.sh
