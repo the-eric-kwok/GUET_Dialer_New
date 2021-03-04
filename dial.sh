@@ -30,7 +30,6 @@ watchdog_update=1    # 1: yes   0: no
 checkstatus() {
     [[ $have_wget = 1 ]]&& wget -q -O - "http://10.0.1.5/drcom/chkstatus?callback=dr1002&jsVersion=4.1&v=6500&lang=zh"; return
     [[ $have_curl = 1 ]]&& curl -d "callback=dr1002&jsVersion=4.1&v=6500&lang=zh" --url "http://10.0.1.5/drcom/chkstatus"
-    exit 0
 }
 
 login() {
@@ -61,12 +60,10 @@ help() {
     echo "  status     check your login status, if result=1 then you've logged in"
     echo '  version    print your script version'
     echo ''
-    exit 0
 }
 
 print_version() {
     echo "Version: $VERSION"
-    exit 0
 }
 
 update() {
@@ -130,13 +127,10 @@ fi
 
 if [ "$1" = "version" ]; then
     print_version
-    exit 0
 elif [ "$1" = "update" ]; then
     update
-    exit 0
 elif [ "$1" = "status" ]; then
     checkstatus
-    exit 0
 elif [ "$1" = "login" ]; then
     echo "Logging..."
     login
@@ -148,10 +142,8 @@ elif [ "$1" = "logout" ]; then
     echo "Logging out..."
     logout
     echo "Done!"
-    exit 0
 else
     help
-    exit 0
 fi
 exit 0
 #####################################################
