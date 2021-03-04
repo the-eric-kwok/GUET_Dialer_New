@@ -22,7 +22,6 @@ isp=""              # 校园网 Campus Network
 # Self update
 auto_update=1        # 1: yes   0: no
 watchdog_update=1    # 1: yes   0: no
-echo $watchdog_update
 ######################################################
 
 
@@ -101,7 +100,6 @@ update() {
         sed -i "s/password=\"\"/password=\"$password\"/g" dial_new.sh
         sed -i "s/#isp=\"$isp\"/isp=\"$isp\"/g" dial_new.sh
         sed -i "s/auto_update=\d/auto_update=$auto_update/g" dial_new.sh
-        echo $watchdog_update
         sed -i "s/watchdog_update=\d/watchdog_update=$watchdog_update/g" dial_new.sh
         chmod +x dial_new.sh
         chmod +x watchdog.sh
