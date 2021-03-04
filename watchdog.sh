@@ -18,7 +18,7 @@ check_status() {
 }
 
 networktest() {
-        ping -c 2 10.32.254.11 > /dev/null 2>&1
+        ping -c 2 10.0.1.5 > /dev/null 2>&1
         [[ $? != 0 ]] && return 255  # Check your wire connection
         check_status
         return $?
