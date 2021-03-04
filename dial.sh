@@ -65,8 +65,8 @@ if [[ $have_curl = 0 ]] && [[ $have_wget = 0 ]]; then
   exit 1
 fi
 
-if [ -z $username ] || [ -z $password ] || [ -z $isp ]; then
-  echo '$username or $password or $isp is empty, please modify script and fill them with your username and password.'
+if [ -z $username ] || [ -z $password ]; then
+  echo '$username or $password is empty, please modify script and fill them with your username and password.'
   exit 2
 fi
 
