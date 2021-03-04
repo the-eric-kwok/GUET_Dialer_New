@@ -5,7 +5,7 @@
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.0"
+VERSION="1.0.1"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
