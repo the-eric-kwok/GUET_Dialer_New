@@ -85,7 +85,7 @@ update() {
       echo 'Updating...'
       if [ $have_wget -eq 1 ] && [ $auto_update -eq 1 ]; then
           wget -q -O dial_new.sh $remote_link
-          [ $watchdog_update -eq 1 ] && wget -q -O watchdog.sh $watchdog_link
+          [ $watchdog_update -eq 1 ] && rm watchdog.sh && wget -q $watchdog_link
       elif [ $have_curl -eq 1 ] && [ $auto_update -eq 1 ]; then
           curl -fsSL -o dial_new.sh $remote_link
           [ $watchdog_update -eq 1 ] && curl -fsSOL $watchdog_link
