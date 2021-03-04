@@ -48,7 +48,7 @@ help() {
   echo '  login      login with provided info'
   echo '  logout     you got that'
   echo "  status     check your login status, if result=1 then you've logged in"
-  echo '  version    print your script version
+  echo '  version    print your script version'
 }
 
 print_version() {
