@@ -5,7 +5,7 @@
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.3"
+VERSION="1.0.4"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -100,9 +100,9 @@ update() {
         sed -i "s/username=\"\"/username=\"$username\"/g" dial_new.sh
         sed -i "s/password=\"\"/password=\"$password\"/g" dial_new.sh
         sed -i "s/#isp=\"$isp\"/isp=\"$isp\"/g" dial_new.sh
-        sed -i "s/auto_update=1/auto_update=$auto_update/g" dial_new.sh
+        sed -i "s/auto_update=\d/auto_update=$auto_update/g" dial_new.sh
         echo $watchdog_update
-        sed -i "s/watchdog_update=1/watchdog_update=$watchdog_update/g" dial_new.sh
+        sed -i "s/watchdog_update=\d/watchdog_update=$watchdog_update/g" dial_new.sh
         chmod +x dial_new.sh
         chmod +x watchdog.sh
         mv dial.sh dial_old.sh
