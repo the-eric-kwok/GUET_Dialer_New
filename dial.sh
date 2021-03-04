@@ -5,7 +5,7 @@
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.4"
+VERSION="1.0.5"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -69,7 +69,7 @@ print_version() {
 
 update() {
     echo 'Checking for update...'
-    remote_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/auto_update/dial.sh'
+    remote_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/main/dial.sh'
     watchdog_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/main/watchdog.sh'
     [ $have_wget -eq 1 ] && [ $have_curl -eq 0 ] && remote_version=$(wget -q -O - $remote_link | grep "VERSION=")
     [ $have_curl -eq 1 ] && [ $have_wget -eq 0 ] && remote_version=$(curl -fsSL $remote_link | grep "VERSION=")
@@ -137,6 +137,7 @@ elif [ "$1" = "login" ]; then
     echo "Logging..."
     login
     echo "Done!"
+    sleep 5
     update
 elif [ "$1" = "logout" ]; then
     get_ip
