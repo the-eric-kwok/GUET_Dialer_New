@@ -1,17 +1,18 @@
 #!/bin/sh
+set -euo pipefail
 ####################################
 # Error Code:                      #
 # 1: Missing wget and/or curl      #
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.5"
+VERSION="1.0.6"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
 # Config area
-username=""			# 你的学号
-password=""			# 你的密码
+username=""                   # 你的学号 Your CampusID
+password=""                   # 你的密码 Your Password
 
 # Uncomment below line to configure your network isp
 isp=""              # 校园网 Campus Network
@@ -125,7 +126,10 @@ if [ -z $username ] || [ -z $password ]; then
     exit 2
 fi
 
-if [ "$1" = "version" ]; then
+if [ -z ${1+x} ]; then
+    # If $1 is empty
+    help
+elif [ "$1" = "version" ]; then
     print_version
 elif [ "$1" = "update" ]; then
     update
