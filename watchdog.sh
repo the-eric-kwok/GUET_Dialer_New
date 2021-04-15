@@ -22,7 +22,7 @@ networktest() {
         [ $? -ne 0 ] && return 255  # Check your wire connection
         status=$(check_status)
         if [ $status -eq 1 ]; then
-                ping -c 2 39.156.69.79
+                ping -c 2 39.156.69.79 > /dev/null 2>&1
                 [ $? -eq 0 ] && return 0 || return 1
         fi
         return 254
