@@ -6,7 +6,7 @@ set -euo pipefail
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.6"
+VERSION="1.0.7"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -111,10 +111,8 @@ update() {
     fi
 }
 
-which wget > /dev/null
-[[ $? = 0 ]]&& have_wget=1 || have_wget=0
-which curl > /dev/null
-[[ $? = 0 ]]&& have_curl=1 || have_curl=0
+which wget > /dev/null && have_wget=1 || have_wget=0
+which curl > /dev/null && have_curl=1 || have_curl=0
 
 if [[ $have_curl = 0 ]] && [[ $have_wget = 0 ]]; then
     echo "Missing wget and/or curl, please install one of them with opkg."
