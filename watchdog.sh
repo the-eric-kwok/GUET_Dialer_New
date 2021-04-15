@@ -14,26 +14,35 @@ logtime() {
 
 check_status() {
         status=$(./dial.sh status | grep -o '"result":\d' | grep -o '\d')
-        return $status
+        echo $status
 }
 
 networktest() {
         ping -c 2 10.0.1.5 > /dev/null 2>&1
-        [[ $? != 0 ]] && return 255  # Check your wire connection
-        check_status
-        return $?
+        [ $? -ne 0 ] && return 255  # Check your wire connection
+        status=$(check_status)
+        if [ $status -eq 1 ]; then
+                ping -c 2 39.156.69.79
+                [ $? -eq 0 ] && return 0 || return 1
+        fi
+        return 254
 }
+
 networktest
 result=$?
-if [[ $result == 1 ]]; then
-        echo "$(logtime) Network no problem"
+if [ $result -eq 0 ]; then
+        echo "$(logtime) Network no problem."
         exit 0
 fi
-if [[ $result == 255 ]]; then
-        echo "$(logtime) Network not connected! Please check your wire connection!"
+if [ $result -eq 1 ]; then
+        echo "$(logtime) Dialed up but not able to connect to Internet, blame the campus network."
         exit 1
 fi
-if [[ $result == 0 ]]; then
+if [ $result -eq 255 ]; then
+        echo "$(logtime) Network not connected! Please check your wire connection!"
+        exit 255
+fi
+if [ $result -eq 254 ]; then
         echo "$(logtime) Trying to login..."
         ret=$(/root/dial.sh login)
         result=$(echo $ret | grep -o '"result":\d' | grep -o '\d')
