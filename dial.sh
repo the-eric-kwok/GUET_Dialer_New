@@ -6,7 +6,7 @@ set -euo pipefail
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.7"
+VERSION="1.0.8"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -29,18 +29,18 @@ watchdog_update=1    # 1: yes   0: no
 
 ################### Code Segment #####################
 checkstatus() {
-    [[ $have_wget = 1 ]]&& wget -q -O - "http://10.0.1.5/drcom/chkstatus?callback=dr1002&jsVersion=4.1&v=6500&lang=zh"; return
-    [[ $have_curl = 1 ]]&& curl -d "callback=dr1002&jsVersion=4.1&v=6500&lang=zh" --url "http://10.0.1.5/drcom/chkstatus"
+    [[ $have_wget = 1 ]]&& wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/chkstatus?callback=dr1002&jsVersion=4.1&v=6500&lang=zh"; return
+    [[ $have_curl = 1 ]]&& curl --insecure -d "callback=dr1002&jsVersion=4.1&v=6500&lang=zh" --url "http://10.0.1.5/drcom/chkstatus"
 }
 
 login() {
-    [[ $have_wget = 1 ]]&& wget -q -O - "http://10.0.1.5/drcom/login?callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=4186&lang=zh"; return
-    [[ $have_curl = 1 ]]&& curl -d "callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=4186&lang=zh" --url "http://10.0.1.5/drcom/login"
+    [[ $have_wget = 1 ]]&& wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/login?callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=4186&lang=zh"; return
+    [[ $have_curl = 1 ]]&& curl --insecure -d "callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=4186&lang=zh" --url "http://10.0.1.5/drcom/login"
 }
 
 logout() {
-    [[ $have_wget = 1 ]] && wget -q -O - "http://10.0.1.5/drcom/logout?callback=dr1005&jsVersion=4.1&v=5350&lang=zh"; return
-    [[ $have_curl = 1 ]] && curl -d "callback=dr1005&jsVersion=4.1&v=5350&lang=zh" --url "http://10.0.1.5/drcom/logout"
+    [[ $have_wget = 1 ]] && wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/logout?callback=dr1005&jsVersion=4.1&v=5350&lang=zh"; return
+    [[ $have_curl = 1 ]] && curl --insecure -d "callback=dr1005&jsVersion=4.1&v=5350&lang=zh" --url "http://10.0.1.5/drcom/logout"
 }
 
 get_ip() {
@@ -71,9 +71,9 @@ update() {
     echo 'Checking for update...'
     remote_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/main/dial.sh'
     watchdog_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/main/watchdog.sh'
-    [ $have_wget -eq 1 ] && [ $have_curl -eq 0 ] && remote_version=$(wget -q -O - $remote_link | grep "VERSION=")
-    [ $have_curl -eq 1 ] && [ $have_wget -eq 0 ] && remote_version=$(curl -fsSL $remote_link | grep "VERSION=")
-    [ $have_curl -eq 1 ] && [ $have_wget -eq 1 ] && remote_version=$(curl -fsSL $remote_link | grep "VERSION=")
+    [ $have_wget -eq 1 ] && [ $have_curl -eq 0 ] && remote_version=$(wget --no-check-certificate -q -O - $remote_link | grep "VERSION=")
+    [ $have_curl -eq 1 ] && [ $have_wget -eq 0 ] && remote_version=$(curl --insecure -fsSL $remote_link | grep "VERSION=")
+    [ $have_curl -eq 1 ] && [ $have_wget -eq 1 ] && remote_version=$(curl --insecure -fsSL $remote_link | grep "VERSION=")
     remote_version=$(echo $remote_version | grep -o '\d*\.\d*\.\d*')
     rD1=$(echo $remote_version | cut -d'.' -f1)
     rD2=$(echo $remote_version | cut -d'.' -f2)
@@ -90,12 +90,12 @@ update() {
             return
         elif [ $have_wget -eq 1 ]; then
             echo 'Updating...'
-            wget -q -O dial_new.sh $remote_link
-            [ $watchdog_update -eq 1 ] && rm watchdog.sh && wget -q $watchdog_link
+            wget --no-check-certificate -q -O dial_new.sh $remote_link
+            [ $watchdog_update -eq 1 ] && rm watchdog.sh && wget --no-check-certificate -q $watchdog_link
         elif [ $have_curl -eq 1 ]; then
             echo 'Updating...'
-            curl -fsSL -o dial_new.sh $remote_link
-            [ $watchdog_update -eq 1 ] && curl -fsSOL $watchdog_link
+            curl --insecure -fsSL -o dial_new.sh $remote_link
+            [ $watchdog_update -eq 1 ] && curl --insecure -fsSOL $watchdog_link
         fi
         sed -i "s/username=\"\"/username=\"$username\"/g" dial_new.sh
         sed -i "s/password=\"\"/password=\"$password\"/g" dial_new.sh
