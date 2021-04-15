@@ -6,7 +6,7 @@ set -euo pipefail
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.8"
+VERSION="1.0.9"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -137,7 +137,7 @@ elif [ "$1" = "login" ]; then
     echo "Logging..."
     login
     echo "Done!"
-    sleep 5
+    sleep 30
     update
 elif [ "$1" = "logout" ]; then
     get_ip
