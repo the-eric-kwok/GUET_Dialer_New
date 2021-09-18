@@ -42,3 +42,4 @@ chmod +x dial_watchdog.sh
 
 ## 友情链接
 [Python版本的脚本](https://github.com/AndPuQing/GUET-WIFI_AutoLogin)
+[Windows版本](https://github.com/magicleafs/GUET-Login)
