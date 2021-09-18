@@ -41,5 +41,5 @@ chmod +x dial_watchdog.sh
 你也可以用 `/root/dial.sh login` 来手动拨号，或者用 `/root/dial.sh logout` 来手动断开连接，以及使用 `/root/dial.sh status` 来检查拨号状态，返回的内容中若 result 为 1 则已登录，否则需要登录。
 
 ## 友情链接
-[Python版本的脚本](https://github.com/AndPuQing/GUET-WIFI_AutoLogin)
-[Windows版本](https://github.com/magicleafs/GUET-Login)
+[无图形界面的Python脚本](https://github.com/AndPuQing/GUET-WIFI_AutoLogin)
+[有图形界面的Windows版本](https://github.com/magicleafs/GUET-Login)
