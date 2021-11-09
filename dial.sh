@@ -6,7 +6,7 @@ set -euo pipefail
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.10"
+VERSION="1.0.11"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -69,8 +69,8 @@ print_version() {
 
 update() {
     echo 'Checking for update...'
-    remote_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/main/dial.sh'
-    watchdog_link='https://raw.githubusercontent.com/the-eric-kwok/GUET_Dialer_New/main/watchdog.sh'
+    remote_link='https://gitee.com/erickwok404/GUET_Dialer_New/raw/main/dial.sh'
+    watchdog_link='https://gitee.com/erickwok404/GUET_Dialer_New/raw/main/watchdog.sh'
     [ $have_wget -eq 1 ] && [ $have_curl -eq 0 ] && remote_version=$(wget --no-check-certificate -q -O - $remote_link | grep "VERSION=")
     [ $have_curl -eq 1 ] && [ $have_wget -eq 0 ] && remote_version=$(curl --insecure -fsSL $remote_link | grep "VERSION=")
     [ $have_curl -eq 1 ] && [ $have_wget -eq 1 ] && remote_version=$(curl --insecure -fsSL $remote_link | grep "VERSION=")
