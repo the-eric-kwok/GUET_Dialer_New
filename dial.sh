@@ -6,7 +6,7 @@ set -euo pipefail
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.11"
+VERSION="1.0.12"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
