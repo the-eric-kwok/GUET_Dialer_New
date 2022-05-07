@@ -6,7 +6,7 @@ set -euo pipefail
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.1.0"
+VERSION="1.1.1"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -28,15 +28,6 @@ watchdog_update=1    # 1: yes   0: no
 
 
 ################### Code Segment #####################
-checkstatus() {
-    if [[ $have_wget = 1 ]]; then
-        wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/chkstatus?callback=dr1002&jsVersion=4.1&v=6500&lang=zh"
-    fi
-    if [[ $have_curl = 1 ]]; then
-        curl --insecure -d "callback=dr1002&jsVersion=4.1&v=6500&lang=zh" --url "http://10.0.1.5/drcom/chkstatus"
-    fi
-}
-
 login() {
     if [[ $have_wget = 1 ]]; then
         wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/login?callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R2=&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=2223&lang=zh"
@@ -72,7 +63,6 @@ help() {
     echo 'Options:'
     echo '  login      login with provided info'
     echo '  logout     you got that'
-    echo "  status     check your login status, if result=1 then you've logged in"
     echo '  version    print your script version'
     echo ''
 }
@@ -145,8 +135,6 @@ elif [ "$1" = "version" ]; then
     print_version
 elif [ "$1" = "update" ]; then
     update
-elif [ "$1" = "status" ]; then
-    checkstatus
 elif [ "$1" = "login" ]; then
     echo "Logging..."
     login
