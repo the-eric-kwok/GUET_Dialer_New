@@ -6,7 +6,7 @@ set -euo pipefail
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.0.13"
+VERSION="1.1.0"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -29,22 +29,36 @@ watchdog_update=1    # 1: yes   0: no
 
 ################### Code Segment #####################
 checkstatus() {
-    [[ $have_wget = 1 ]]&& wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/chkstatus?callback=dr1002&jsVersion=4.1&v=6500&lang=zh"; return
-    [[ $have_curl = 1 ]]&& curl --insecure -d "callback=dr1002&jsVersion=4.1&v=6500&lang=zh" --url "http://10.0.1.5/drcom/chkstatus"
+    if [[ $have_wget = 1 ]]; then
+        wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/chkstatus?callback=dr1002&jsVersion=4.1&v=6500&lang=zh"
+    fi
+    if [[ $have_curl = 1 ]]; then
+        curl --insecure -d "callback=dr1002&jsVersion=4.1&v=6500&lang=zh" --url "http://10.0.1.5/drcom/chkstatus"
+    fi
 }
 
 login() {
-    [[ $have_wget = 1 ]]&& wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/login?callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=4186&lang=zh"; return
-    [[ $have_curl = 1 ]]&& curl --insecure -d "callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=4186&lang=zh" --url "http://10.0.1.5/drcom/login"
+    if [[ $have_wget = 1 ]]; then
+        wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/login?callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R2=&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=2223&lang=zh"
+    fi
+    if [[ $have_curl = 1 ]]; then
+        curl --insecure "http://10.0.1.5/drcom/login?callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R2=&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=2223&lang=zh"
+    fi
 }
 
 logout() {
-    [[ $have_wget = 1 ]] && wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/logout?callback=dr1005&jsVersion=4.1&v=5350&lang=zh"; return
-    [[ $have_curl = 1 ]] && curl --insecure -d "callback=dr1005&jsVersion=4.1&v=5350&lang=zh" --url "http://10.0.1.5/drcom/logout"
+    if [[ $have_wget = 1 ]]; then
+        wget --no-check-certificate -q -O - "http://10.0.1.5:801/eportal/portal/mac/unbind?callback=dr1003&user_account=$username$isp&wlan_user_mac=000000000000&wlan_user_ip=$(get_ip)&jsVersion=4.1&v=3685&lang=zh"
+        wget --no-check-certificate -q -O - "http://10.0.1.5:801/eportal/portal/logout?callback=dr1004&login_method=0&user_account=drcom&user_password=123&ac_logout=1&register_mode=1&wlan_user_ip=$(get_ip)&wlan_user_ipv6=&wlan_vlan_id=1&wlan_user_mac=000000000000&wlan_ac_ip=&wlan_ac_name=&jsVersion=4.1&v=3340&lang=zh"
+    fi
+    if [[ $have_curl = 1 ]]; then
+        curl --insecure "http://10.0.1.5:801/eportal/portal/mac/unbind?callback=dr1003&user_account=$username$isp&wlan_user_mac=000000000000&wlan_user_ip=$(get_ip)&jsVersion=4.1&v=3685&lang=zh"
+        curl --insecure "http://10.0.1.5:801/eportal/portal/logout?callback=dr1004&login_method=0&user_account=drcom&user_password=123&ac_logout=1&register_mode=1&wlan_user_ip=$(get_ip)&wlan_user_ipv6=&wlan_vlan_id=1&wlan_user_mac=000000000000&wlan_ac_ip=&wlan_ac_name=&jsVersion=4.1&v=3340&lang=zh"
+    fi
 }
 
 get_ip() {
-    ip_addr=$(ifconfig | grep -A 3 'eth' | grep -o -E -m 1 'inet addr:\d+\.\d+\.\d+\.\d+' | cut -d ':' -f 2)
+    ifconfig | grep -E '^(eth|en)' -A 5 | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' -o | head -1
 }
 
 help() {
@@ -139,8 +153,6 @@ elif [ "$1" = "login" ]; then
     echo "Done!"
     sh -c "sleep 30 && ./dial.sh update" &
 elif [ "$1" = "logout" ]; then
-    get_ip
-    echo "IP:${ip_addr}"
     echo "Logging out..."
     logout
     echo "Done!"
