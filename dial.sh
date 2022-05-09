@@ -6,7 +6,7 @@ set -euo pipefail
 # 2: username or password is empty #
 ####################################
 
-VERSION="1.1.1"
+VERSION="1.1.2"
 
 ################## Config Segment ###################
 ## Contents in this section will remain in self updating.
@@ -33,7 +33,7 @@ login() {
         wget --no-check-certificate -q -O - "http://10.0.1.5/drcom/login?callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R2=&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=2223&lang=zh"
     fi
     if [[ $have_curl = 1 ]]; then
-        curl --insecure "http://10.0.1.5/drcom/login?callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R2=&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=2223&lang=zh"
+        curl --silent --insecure "http://10.0.1.5/drcom/login?callback=dr1003&DDDDD=${username}${isp}&upass=${password}&0MKKey=123456&R1=0&R2=&R3=0&R6=0&para=00&v6ip=&terminal_type=1&lang=zh-cn&jsVersion=4.1&v=2223&lang=zh"
     fi
 }
 
@@ -43,8 +43,8 @@ logout() {
         wget --no-check-certificate -q -O - "http://10.0.1.5:801/eportal/portal/logout?callback=dr1004&login_method=0&user_account=drcom&user_password=123&ac_logout=1&register_mode=1&wlan_user_ip=$(get_ip)&wlan_user_ipv6=&wlan_vlan_id=1&wlan_user_mac=000000000000&wlan_ac_ip=&wlan_ac_name=&jsVersion=4.1&v=3340&lang=zh"
     fi
     if [[ $have_curl = 1 ]]; then
-        curl --insecure "http://10.0.1.5:801/eportal/portal/mac/unbind?callback=dr1003&user_account=$username$isp&wlan_user_mac=000000000000&wlan_user_ip=$(get_ip)&jsVersion=4.1&v=3685&lang=zh"
-        curl --insecure "http://10.0.1.5:801/eportal/portal/logout?callback=dr1004&login_method=0&user_account=drcom&user_password=123&ac_logout=1&register_mode=1&wlan_user_ip=$(get_ip)&wlan_user_ipv6=&wlan_vlan_id=1&wlan_user_mac=000000000000&wlan_ac_ip=&wlan_ac_name=&jsVersion=4.1&v=3340&lang=zh"
+        curl --silent --insecure "http://10.0.1.5:801/eportal/portal/mac/unbind?callback=dr1003&user_account=$username$isp&wlan_user_mac=000000000000&wlan_user_ip=$(get_ip)&jsVersion=4.1&v=3685&lang=zh"
+        curl --silent --insecure "http://10.0.1.5:801/eportal/portal/logout?callback=dr1004&login_method=0&user_account=drcom&user_password=123&ac_logout=1&register_mode=1&wlan_user_ip=$(get_ip)&wlan_user_ipv6=&wlan_vlan_id=1&wlan_user_mac=000000000000&wlan_ac_ip=&wlan_ac_name=&jsVersion=4.1&v=3340&lang=zh"
     fi
 }
 

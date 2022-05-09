@@ -13,12 +13,9 @@ logtime() {
 }
 
 networktest() {
-    ping -c 2 10.0.1.5 > /dev/null 2>&1
-    [ $? -ne 0 ] && return 255  # Cannot ping to dial up server
-    ping -c 2 114.114.114.114 > /dev/null 2>&1
-    [ $? -ne 0 ] && return 1  # Cannot ping to 114 DNS server
-    ping -c 2 baidu.com > /dev/null 2>&1
-    [ $? -ne 0 ] && return 2  # Can connect to 114 DNS server but not baidu.com
+    ping -c 2 10.0.1.5 > /dev/null 2>&1 || return 255  # Cannot ping to dial up server
+    ping -c 2 114.114.114.114 > /dev/null 2>&1 || return 254  # Cannot ping to 114 DNS server
+    ping -c 2 baidu.com > /dev/null 2>&1 || return 1  # Can connect to 114 DNS server but not baidu.com
     return 0  # Network OK
 }
 
@@ -29,10 +26,6 @@ if [ $result -eq 0 ]; then
     exit 0
 fi
 if [ $result -eq 1 ]; then
-    echo "$(logtime) Dialed up but not able to connect to Internet, blame the campus network."
-    exit 1
-fi
-if [ $result -eq 2 ]; then
     echo "$(logtime) DNS configuration error."
     exit 2
 fi
@@ -42,14 +35,14 @@ if [ $result -eq 255 ]; then
 fi
 if [ $result -eq 254 ]; then
     echo "$(logtime) Trying to login..."
-    ret=$(/root/dial.sh login)
+    ret=$(./dial.sh login)
     result=$(echo $ret | grep -o '"result":\d' | grep -o '\d')
     if [[ $result == 1 ]] ; then
         echo "$(logtime) Logged in successfully"
-        return 0
+        exit 0
     else
         msga=$(echo $ret | grep -o '"msga":".*"' | cut -d ':' -f 2 | grep -o '[^"]*')
         echo "$(logtime) Logged in failed, error msg: ${msga}"
-        return 254
+        exit 254
     fi
 fi
